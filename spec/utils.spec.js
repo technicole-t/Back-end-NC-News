@@ -95,6 +95,40 @@ describe("formatDates", () => {
   });
 });
 
-describe("makeRefObj", () => {});
+describe.only("makeRefObj", () => {
+  it("returns an empty object when passed an empty array", () => {
+    const list = [];
+    const actual = makeRefObj(list);
+    const expected = {};
+    expect(actual).to.eql(expected);
+  });
+  it("returns an object with the value of article as the key and value of title as the value of the key, when passed one object only", () => {
+    const list = [{ article_id: 1, title: "A" }];
+    const actual = makeRefObj(list);
+    const expected = { A: 1 };
+    expect(actual).to.eql(expected);
+  });
+  it("returns an object with the value of article as the key and value of title as the value of the key, when passed multiple objects", () => {
+    const list = [
+      { article_id: 1, title: "A" },
+      { article_id: 2, title: "B" },
+      { article_id: 3, title: "C" },
+      { article_id: 4, title: "D" }
+    ];
+    const actual = makeRefObj(list);
+    const expected = { A: 1, B: 2, C: 3, D: 4 };
+    expect(actual).to.eql(expected);
+  });
+  it("ensures the return object is not a mutation of the original", () => {
+    const list = [
+      { article_id: 1, title: "A" },
+      { article_id: 2, title: "B" }
+    ];
+    expect(list).to.eql([
+      { article_id: 1, title: "A" },
+      { article_id: 2, title: "B" }
+    ]);
+  });
+});
 
 describe("formatComments", () => {});

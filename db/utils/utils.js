@@ -10,11 +10,15 @@ exports.formatDates = list => {
   return convertedList;
 };
 
-// This utility function should be able to take an array (list) of objects and return
-// a reference object. The reference object must be keyed by each item's title, with the
-// values being each item's corresponding id. e.g.
+// takes an array (list) of objects and return a reference object.s
 // [{ article_id: 1, title: 'A' }] becomes { A: 1 }
-exports.makeRefObj = list => {};
+exports.makeRefObj = list => {
+  let refObj = {};
+  for (let i = 0; i < list.length; i++) {
+    refObj[list[i].title] = list[i].article_id;
+  }
+  return refObj;
+};
 
 // This utility function should be able to take an array of comment objects (comments)
 // and a reference object, and return a new array of formatted comments.
