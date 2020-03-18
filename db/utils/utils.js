@@ -1,12 +1,13 @@
-// You should employ full TDD as you build these functions.
-// If you need extra guidance refer back to your schema in the migrations
-// files and look at how the data provided differs from the structure set out in the schema.
-
-// This utility function should be able to take an array (list) of objects
-// and return a new array. Each item in the new array must have its timestamp converted
-// into a Javascript date object. Everything else in each item must be maintained.
+// Takes an array (list) of objects returns a new array, each item must have a timestamp
+// converted into a Javascript date object. Everything else in each item must be maintained.
 exports.formatDates = list => {
-  if (list.length === 0) return [];
+  let convertedList = list.map(item => {
+    return { ...item };
+  });
+  convertedList.forEach(item => {
+    item.created_at = new Date(item.created_at);
+  });
+  return convertedList;
 };
 
 // This utility function should be able to take an array (list) of objects and return
