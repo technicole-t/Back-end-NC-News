@@ -95,7 +95,7 @@ describe("formatDates", () => {
   });
 });
 
-describe.only("makeRefObj", () => {
+describe("makeRefObj", () => {
   it("returns an empty object when passed an empty array", () => {
     const list = [];
     const actual = makeRefObj(list);
@@ -124,11 +124,94 @@ describe.only("makeRefObj", () => {
       { article_id: 1, title: "A" },
       { article_id: 2, title: "B" }
     ];
-    expect(list).to.eql([
+    expect(list).to.not.equal([
       { article_id: 1, title: "A" },
       { article_id: 2, title: "B" }
     ]);
   });
 });
 
-describe("formatComments", () => {});
+describe("formatComments", () => {
+  it("returns an empty array when passed an empty array", () => {
+    const comments = [];
+    const ref = {};
+    const actual = formatComments(comments, ref);
+    const expected = [];
+    expect(actual).to.eql(expected);
+  });
+  it("returns array in the correct format when there is only one object in the array", () => {
+    const comments = [
+      {
+        body: "This morning, I showered for nine minutes.",
+        belongs_to: "A",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: 975242163389
+      }
+    ];
+    const ref = { A: 1 };
+    const actual = formatComments(comments, ref);
+    const expected = [
+      {
+        body: "This morning, I showered for nine minutes.",
+        article_id: 1,
+        author: "butter_bridge",
+        votes: 16,
+        created_at: 975242163389
+      }
+    ];
+    expect(actual).to.eql(expected);
+  });
+  it("returns array in the correct format when passed an array of more than one object", () => {
+    const comments = [
+      {
+        body: "The owls are not what they seem.",
+        belongs_to: "A",
+        created_by: "icellusedkars",
+        votes: 20,
+        created_at: 1006778163389
+      },
+      {
+        body: "This morning, I showered for nine minutes.",
+        belongs_to: "B",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: 975242163389
+      }
+    ];
+    const ref = { A: 1, B: 2 };
+    const actual = formatComments(comments, ref);
+    const expected = [
+      {
+        body: "The owls are not what they seem.",
+        article_id: 1,
+        author: "icellusedkars",
+        votes: 20,
+        created_at: 1006778163389
+      },
+      {
+        body: "This morning, I showered for nine minutes.",
+        article_id: 2,
+        author: "butter_bridge",
+        votes: 16,
+        created_at: 975242163389
+      }
+    ];
+    expect(actual).to.eql(expected);
+  });
+  it("returns a new array, original array is not mutated", () => {
+    const comments = [
+      {
+        body: "This morning, I showered for nine minutes.",
+        belongs_to: "A",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: 975242163389
+      }
+    ];
+    const ref = { A: 1 };
+    const actual = formatComments(comments, ref);
+    expect(actual).to.be.an("array");
+    expect(actual).to.not.equal(comments);
+  });
+});
